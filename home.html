@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Here we have to add link of font-awesome CDNJS  and select version 15.10.0  tHis is uesd to get icon of sun and location -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+      crossorigin="anonymous"
+    />
+    <title>Weather App</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@600&display=swap");
+
+      * {
+        /*always should be done padding and margin = 0 */
+
+        padding: 0;
+        margin: 0;
+        font-family: "Baloo Bhai 2", cursive;
+        color: white;
+      }
+      body {
+        background-color: #171717;
+        /* make item center */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        height: 100vh;
+        width: 100vw;
+      }
+      html,
+      body {
+        font-size: 62.5%;
+        height: 100%;
+      }
+      .box {
+        width: 20vw;
+        height: 60vh;
+        border-radius: 2rem;
+        box-shadow: 0 0.2rem 3rem rgb(255, 255, 255);
+
+        background: rgb(14, 13, 13);
+
+        position: relative;
+
+        min-width: 30rem;
+
+        min-height: 45rem;
+      }
+      .info {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 45%;
+
+        z-index: 4;
+      }
+      .location {
+        margin-top: 1.5rem;
+
+        text-align: center;
+
+        font-weight: 800;
+
+        font-size: 3rem;
+
+        font-size: 500;
+      }
+      #date {
+        text-align: center;
+
+        margin-top: 0.5rem;
+
+        color: white;
+
+        font-size: 1.2rem;
+        text-transform: uppercase;
+
+        font-weight: 300;
+      }
+      .temp {
+        margin-top: 2.5rem;
+
+        text-align: center;
+
+        font-size: 3rem;
+      }
+      .tempmin_max {
+        text-align: center;
+
+        margin-top: 0.3rem;
+
+        font-weight: 300;
+
+        font-size: 1.2rem;
+        color: white;
+      }
+      #weathericon {
+        height: 55%;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+        font-size: 3em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="waveone"></div>
+      <div class="wavetwo"></div>
+      <div class="wavethree"></div>
+      <div id="weathericon">
+        <i class="fas fa-sun" style="font-size: 3.73em; color: yellow"></i>
+      </div>
+      <div class="info">
+        <h2 class="location">
+          <i class="fas fa-street-view" style="color: rgb(241, 45, 10)"></i>
+          {%location%}, {%country%}
+        </h2>
+        <p id="date"></p>
+        <h1 class="temp">{%tempval%}&deg;C</h1>
+        <h3 class="tempmin_max">
+          Min {%tempmin%}&deg;C | Max {%tempmax%}&deg;C
+        </h3>
+      </div>
+    </div>
+    <script>
+      const currdate = document.getElementById("date");
+
+      let weathericon = document.getElementById("weathericon");
+      var tempStatus = "{%tempstatus%";
+      if (tempStatus == "Sunny") {
+        weathericon.innerHTML = `<i class="fas fa-sun" style="font-size: 3.73em; color: yellow"></i>`;
+      }
+      if (tempStatus == "Clouds") {
+        weathericon.innerHTML = `<i class="fas fa-cloud" style="font-size: 3.73em; color: white"></i>`;
+      }
+      if (tempStatus == "Rainy") {
+        weathericon.innerHTML = `<i class="fas fa-rain" style="font-size: 3.73em; color: white"></i>`;
+      }
+      if (tempStatus == "Haze") {
+        weathericon.innerHTML = `<i class="fas fa-fog" style="font-size: 3.73em; color: white"></i>`;
+      } else {
+        weathericon.innerHTML = `<i class="fas fa-cloud" style="font-size: 3.73em; color: white"></i>`;
+      }
+
+      const getCurrentdata = () => {
+        var weekday = new Array(7);
+
+        weekday[0] = "Sun";
+
+        weekday[1] = "Mon";
+
+        weekday[2] = "Tues";
+
+        weekday[3] = "Wed";
+
+        weekday[4] = "Thu";
+
+        weekday[5] = "Fri";
+
+        weekday[6] = "Sat";
+        let currentTime = new Date();
+        var t = weekday[currentTime.getDay()];
+        return t;
+      };
+      const getCurrentTime = () => {
+        var months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "June",
+          "July",
+          "Aug",
+          "Sept",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        var now = new Date();
+        var month = months[now.getMonth()];
+        var date = now.getDate();
+        let hours = now.getHours();
+        let mins = now.getMinutes();
+        let period = "AM";
+        if (hours > 11) {
+          periods = "PM";
+        }
+        if (hours > 12) {
+          hours = hours - 12;
+        }
+        if (mins < 10) {
+          mins = "0" + mins;
+        }
+        if (hours < 10) {
+          hours = "0" + hours;
+        }
+        return `${month} ${date}  |  ${hours}:${mins} ${period}`;
+      };
+      currdate.innerHTML = getCurrentdata() + "  |  " + getCurrentTime();
+    </script>
+  </body>
+</html>
